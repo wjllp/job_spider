@@ -1,0 +1,33 @@
+#coding:utf-8
+import pymysql.cursors
+
+connection = pymysql.connect(host='127.0.0.1',
+                             port=3360,
+                             user='root',
+                             password='root',
+                             db='jobs',
+                             charset='utf8',
+                             cursorclass=pymysql.cursors.DictCursor)
+cursor = connection.cursor()
+
+def select_inf():
+    sql = "select * from job_inf"
+    cursor.execute(sql)
+    return cursor.fetchall()
+
+
+def insert_inf(title,url,time):
+    sql = "insert into job_inf(title,url,time) values ('%s','%s','%s')"
+    data = (title,url,time)
+    cursor.execute(sql%data)
+    connection.commit()
+    print('添加信息成功！')
+
+def is_inserted(title):
+    sql = "select * from job_inf where title = '%s'"
+    data = (title)
+    cursor.execute(sql%data)
+    if(cursor.rowcount) == 0:         #若为0则表示没有插入
+        return False
+    else:
+        return True
